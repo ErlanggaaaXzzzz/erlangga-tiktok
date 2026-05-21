@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ERLANGGA DOWNLOADER</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700;800&display=swap');
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #020617;
+            min-height: 100vh;
+            background-image: 
+                radial-gradient(circle at 50% 0%, #1e1b4b 0%, #020617 70%),
+                linear-gradient(rgba(255, 255, 255, 0.005) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.005) 1px, transparent 1px);
+            background-size: 100%, 20px 20px, 20px 20px;
+        }
+        .glass-card {
+            background: rgba(15, 23, 42, 0.75);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+        .btn-premium {
+            background: linear-gradient(135deg, #4f46e5 0%, #06b6d4 100%);
+            text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+            box-shadow: 0 4px 20px rgba(79, 70, 229, 0.4);
+        }
+        .btn-premium:hover { box-shadow: 0 4px 25px rgba(6, 182, 212, 0.6); }
+        #apiMenu { z-index: 9999 !important; background: #0f172a; border: 1px solid rgba(255,255,255,0.1); }
+        .stat-badge { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.05); }
+        .hashtag-chip { background: rgba(6, 182, 212, 0.1); border: 1px solid rgba(6, 182, 212, 0.2); color: #22d3ee; }
+        ::-webkit-scrollbar { width: 4px; height: 4px; }
+        ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
+    </style>
+</head>
+<body class="text-slate-100 flex flex-col items-center p-4 pt-10 sm:p-6 relative">
+
+    <!-- Modal API Code JSON Example -->
+    <div id="jsonModal" class="hidden fixed inset-0 flex items-center justify-center p-4 z-[10000]">
+        <div class="absolute inset-0 bg-black/80 backdrop-blur-md" onclick="closeJson()"></div>
+        <div class="glass-card w-full max-w-md rounded-[2.5rem] p-6 relative border border-indigo-500/30">
+            <div class="flex justify-between items-center mb-4">
+                <div class="flex items-center gap-2">
+                    <div class="w-2 h-2 rounded-full bg-indigo-500 animate-pulse"></div>
+                    <h3 class="text-[10px] font-black tracking-widest text-indigo-400 uppercase">Bot Integration</h3>
+                </div>
+                <button onclick="closeJson()" class="text-slate-500 hover:text-white p-2 text-xl">&times;</button>
+            </div>
+            <div class="bg-black/60 rounded-2xl p-4 border border-white/5 mb-4">
+                <p class="text-[9px] text-slate-500 font-bold uppercase mb-2">Example Code (Node.js):</p>
+                <pre class="text-[10px] text-cyan-400 overflow-x-auto leading-relaxed font-mono" id="codeBlock">
+const axios = require('axios');
+async function downloadMedia(url, engine) {
+  const apikey = "ERLANGGA_SECRET_123";
+  const api = `http://localhost:3000/api/bot?url=${url}&engine=${engine}&apikey=${apikey}`;
+  const res = await axios.get(api);
+  return res.data;
+}</pre>
+            </div>
+            <button onclick="copyCode()" class="w-full py-4 bg-indigo-600 hover:bg-indigo-500 text-white rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] transition-all shadow-lg shadow-indigo-500/20">
+                <i class="fa-solid fa-copy mr-2"></i> Copy Full Script
+            </button>
+        </div>
+    </div>
+
+    <!-- Modal Login / Panel Dashboard Admin -->
+    <div id="adminModal" class="hidden fixed inset-0 flex items-center justify-center p-4 z-[10000]">
+        <div class="absolute inset-0 bg-black/85 backdrop-blur-md" onclick="closeAdmin()"></div>
+        <div class="glass-card w-full max-w-md rounded-[2.5rem] p-6 relative border border-rose-500/30">
+            
+            <!-- Tampilan Login PIN Admin -->
+            <div id="adminAuthSection">
+                <h3 class="text-xs font-black tracking-widest text-rose-500 uppercase mb-4 text-center"><i class="fa-solid fa-lock mr-1"></i> Verifikasi Otoritas Admin</h3>
+                <input type="password" id="adminPin" placeholder="Masukkan PIN Secure Admin" class="w-full bg-black/50 border border-slate-800 rounded-2xl p-4 text-center text-sm font-black tracking-widest text-white mb-3 focus:outline-none focus:border-rose-500">
+                <button onclick="loginAdmin()" class="w-full py-4 bg-rose-600 hover:bg-rose-500 text-white rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all">UNLOCK SYSTEM PANEL</button>
+            </div>
+
+            <!-- Tampilan Panel Utama Admin (Hidden Default) -->
+            <div id="adminDashboardSection" class="hidden space-y-4">
+                <div class="flex justify-between items-center border-b border-white/5 pb-3">
+                    <h3 class="text-xs font-black tracking-widest text-emerald-400 uppercase"><i class="fa-solid fa-gears mr-1"></i> Core Admin Dashboard</h3>
+                    <button onclick="closeAdmin()" class="text-slate-400 hover:text-white text-lg">&times;</button>
+                </div>
+
+                <!-- Live Statistik Server Sederhana -->
+                <div class="bg-slate-950/60 p-3 rounded-xl border border-white/5 flex justify-between items-center">
+                    <span class="text-[10px] text-slate-400 font-bold uppercase">Total Traffic Engine Hits:</span>
+                    <span id="admTotalHits" class="text-xs font-mono font-black text-cyan-400">0 Requests</span>
+                </div>
+
+                <!-- Fitur Maintenance Switch Toggle -->
+                <div class="bg-slate-950/60 p-4 rounded-2xl border border-white/5 space-y-2">
+                    <div class="flex justify-between items-center">
+                        <span class="text-[10px] text-slate-200 font-bold uppercase">Status Maintenance Mode</span>
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" id="admMaintenanceToggle" onchange="updateMaintenanceStatus()" class="sr-only peer">
+                            <div class="w-9 h-5 bg-slate-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-rose-600"></div>
+                        </label>
+                    </div>
+                    <p class="text-[8px] text-slate-500 leading-normal">Aktifkan untuk memblokir ekstraksi user umum dan menampilkan halaman perbaikan sistem.</p>
+                </div>
+
+                <!-- Fitur Pengubah API Link Instagram Dinamis -->
+                <div class="bg-slate-950/60 p-4 rounded-2xl border border-white/5 space-y-2">
+                    <span class="text-[10px] text-slate-200 font-bold uppercase block">Instagram Scraper Proxy Path</span>
+                    <input type="text" id="admIgApiUrl" class="w-full bg-black/60 border border-slate-800 rounded-xl p-3 font-mono text-[10px] text-cyan-400 focus:outline-none">
+                    <button onclick="saveAdminSettings()" class="w-full py-2.5 bg-indigo-600 hover:bg-indigo-500 rounded-xl text-[9px] font-black uppercase tracking-wider">Simpan Konfigurasi</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Header System -->
+    <div class="w-full max-w-2xl flex justify-between items-center mb-6 px-1">
+        <div class="flex flex-col">
+            <h1 class="text-2xl font-black tracking-tighter italic">ERLANGGA<span class="text-cyan-400">.</span>API</h1>
+            <p class="text-[8px] font-bold text-slate-500 tracking-[0.3em] uppercase">V3.0 Hub Multi-Engine</p>
+        </div>
+        
+        <div class="relative">
+            <button id="btnMenu" onclick="toggleMenu()" class="w-10 h-10 rounded-xl bg-slate-900/80 flex items-center justify-center border border-white/10 active:scale-90 transition-all">
+                <i class="fa-solid fa-ellipsis-vertical text-cyan-400"></i>
+            </button>
+            
+            <div id="apiMenu" class="hidden absolute right-0 mt-2 w-56 rounded-2xl p-2 shadow-2xl animate__animated animate__fadeInDown animate__faster">
+                <button onclick="copyKey()" class="w-full flex items-center gap-3 px-3 py-3 hover:bg-white/5 rounded-xl transition-all group">
+                    <i class="fa-solid fa-key text-amber-500 text-xs group-hover:rotate-12"></i>
+                    <span class="text-[11px] font-bold text-white uppercase">Copy API Key</span>
+                </button>
+                <button onclick="openJson()" class="w-full flex items-center gap-3 px-3 py-3 hover:bg-white/5 rounded-xl transition-all group">
+                    <i class="fa-solid fa-file-code text-cyan-400 text-xs group-hover:scale-110"></i>
+                    <span class="text-[11px] font-bold text-white uppercase">JSON Example</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="w-full max-w-2xl">
+        
+        <!-- Live Maintenance Alert Banner -->
+        <div id="maintenanceAlert" class="hidden mb-4 p-4 bg-rose-500/10 border border-rose-500/30 rounded-2xl flex items-center gap-3 animate__animated animate__headShake">
+            <i class="fa-solid fa-triangle-exclamation text-rose-500 text-sm animate-bounce"></i>
+            <div class="flex flex-col">
+                <span class="text-[10px] font-black text-rose-400 uppercase tracking-wider">SYSTEM MAINTENANCE MODE ACTIVE</span>
+                <span class="text-[9px] text-slate-400">Hanya Administrator Terverifikasi yang Dapat Menjalankan Pipeline Restrukturisasi.</span>
+            </div>
+        </div>
+
+        <div class="glass-card rounded-[2.5rem] p-6 sm:p-8 border border-white/10 relative overflow-hidden">
+            <div class="absolute -top-10 -right-10 w-32 h-32 bg-indigo-500/10 blur-3xl rounded-full pointer-events-none"></div>
+            <div class="absolute -bottom-10 -left-10 w-32 h-32 bg-cyan-500/10 blur-3xl rounded-full pointer-events-none"></div>
+
+            <div class="space-y-4">
+                <div class="flex gap-2">
+                    <div class="relative w-1/4 sm:w-1/5 shrink-0">
+                        <select id="mediaEngine" class="w-full h-full bg-black/40 border border-slate-800 rounded-2xl px-2 appearance-none text-[11px] font-black text-cyan-400 focus:outline-none focus:border-cyan-500 transition-all cursor-pointer text-center tracking-wide">
+                            <option value="tiktok" selected>TIKTOK</option>
+                            <option value="instagram">INSTAGRAM</option>
+                            <option value="youtube">YT SHORTS</option>
+                        </select>
+                        <div class="absolute inset-y-0 right-2 flex items-center pointer-events-none text-[8px] text-slate-500">
+                            <i class="fa-solid fa-chevron-down"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="relative flex-1 flex items-center">
+                        <input type="text" id="videoUrl" placeholder="Tempel tautan / link di sini..." 
+                            class="w-full bg-black/40 border border-slate-800 rounded-2xl px-5 py-4 focus:outline-none focus:border-cyan-500 text-sm text-white transition-all tracking-wide placeholder-slate-600">
+                    </div>
+                </div>
+                
+                <button onclick="process()" id="btnMain" class="btn-premium w-full py-4 rounded-2xl font-black text-[10px] tracking-widest uppercase flex items-center justify-center gap-2 transition-all active:scale-95">
+                    <i class="fa-solid fa-bolt-lightning text-[10px]"></i> RUNNING EXTRACTOR ENGINE
+                </button>
+            </div>
+
+            <!-- Console Log Box -->
+            <div id="console" class="hidden mt-6 animate__animated animate__fadeIn">
+                <div id="logBox" class="bg-black/90 rounded-2xl p-4 h-40 overflow-y-auto font-mono text-[9px] text-cyan-400 border border-cyan-500/10 leading-relaxed shadow-inner"></div>
+            </div>
+
+            <!-- Result Card -->
+            <div id="result" class="hidden mt-6 p-5 rounded-[2.2rem] bg-slate-900/60 border border-white/10 animate__animated animate__fadeInUp">
+                <!-- Creator Profile Section -->
+                <div id="creatorSection" class="flex items-center gap-3 pb-4 mb-4 border-b border-white/5">
+                    <img id="resAvatar" src="" alt="Avatar" class="w-9 h-9 rounded-full object-cover border border-cyan-500/30 bg-slate-800">
+                    <div class="flex flex-col min-w-0">
+                        <span id="resNickname" class="text-xs font-bold text-white truncate leading-none mb-1">Author Name</span>
+                        <span id="resUsername" class="text-[10px] font-medium text-slate-400 truncate tracking-wide">@username</span>
+                    </div>
+                    <div id="platformBadge" class="ml-auto bg-cyan-500/10 text-cyan-400 text-[8px] font-black uppercase tracking-wider px-2.5 py-1 rounded-full border border-cyan-500/20">TIKTOK</div>
+                </div>
+
+                <!-- Title Header Description -->
+                <div class="mb-4"><h2 id="resTitle" class="text-[11px] font-semibold text-slate-200 leading-relaxed max-h-16 overflow-y-auto pr-1"></h2></div>
+
+                <!-- Tipe Video Tunggal Layer -->
+                <div id="layerVideo" class="flex gap-4 items-start mb-4 hidden">
+                    <div class="relative shrink-0"><img id="resCover" class="w-24 h-32 rounded-xl object-cover border border-white/10 shadow-lg bg-slate-800"></div>
+                    <div class="flex-1 min-w-0 flex flex-col h-32 justify-center gap-2">
+                        <a id="resVideo" href="#" target="_blank" class="w-full bg-white text-slate-950 text-center py-3.5 rounded-xl font-black text-[10px] uppercase hover:bg-cyan-400 hover:text-slate-950 transition-all flex items-center justify-center gap-1.5 shadow-lg">
+                            <i class="fa-solid fa-cloud-arrow-down text-[11px]"></i> UNDUH VIDEO / MEDIA SEKARANG
+                        </a>
+                        <a id="resMusic" href="#" target="_blank" class="w-full bg-slate-800 text-slate-200 text-center py-3 rounded-xl font-black text-[9px] uppercase hover:bg-slate-700 transition-all border border-white/5 flex items-center justify-center gap-1.5">
+                            <i class="fa-solid fa-music text-[10px]"></i> UNDUH SOUND AUDIO (MP3)
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Tipe Slide Foto / Gambar Grid Layer -->
+                <div id="layerImages" class="mb-4 hidden">
+                    <span class="text-[8px] font-bold text-slate-400 uppercase tracking-widest block mb-2"><i class="fa-solid fa-images mr-1 text-cyan-400"></i> Daftar Slide Gambar Konten :</span>
+                    <div id="resImagesGrid" class="grid grid-cols-3 sm:grid-cols-4 gap-2 max-h-56 overflow-y-auto p-2 bg-black/30 rounded-xl border border-white/5"></div>
+                </div>
+
+                <!-- Video Metrics Grid -->
+                <div class="grid grid-cols-4 gap-1.5 mb-4 text-center">
+                    <div class="stat-badge p-2 rounded-xl"><i class="fa-solid fa-heart text-rose-500 text-[11px] mb-1 block"></i><span id="statLikes" class="text-[10px] font-black text-white">-</span></div>
+                    <div class="stat-badge p-2 rounded-xl"><i class="fa-solid fa-comment text-sky-400 text-[11px] mb-1 block"></i><span id="statComments" class="text-[10px] font-black text-white">-</span></div>
+                    <div class="stat-badge p-2 rounded-xl"><i class="fa-solid fa-share text-emerald-400 text-[11px] mb-1 block"></i><span id="statShares" class="text-[10px] font-black text-white">-</span></div>
+                    <div class="stat-badge p-2 rounded-xl"><i class="fa-solid fa-eye text-amber-400 text-[11px] mb-1 block"></i><span id="statViews" class="text-[10px] font-black text-white">-</span></div>
+                </div>
+
+                <!-- Dynamic Hashtags Area -->
+                <div class="flex flex-col gap-1.5">
+                    <span class="text-[8px] font-bold text-slate-500 uppercase tracking-widest"><i class="fa-solid fa-hashtag mr-1"></i> Terdeteksi Hashtag</span>
+                    <div id="resHashtags" class="flex flex-wrap gap-1 max-h-16 overflow-y-auto pr-1"><span class="text-[9px] text-slate-500 italic">Tidak ada hashtag</span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Floating Trigger Admin Button -->
+    <button onclick="openAdmin()" class="fixed bottom-5 right-5 w-11 h-11 rounded-full bg-slate-900 border border-white/10 flex items-center justify-center text-xs text-slate-400 hover:text-rose-500 hover:border-rose-500/30 transition-all shadow-xl z-50">
+        <i class="fa-solid fa-user-shield"></i>
+    </button>
+
+    <!-- Footer System -->
+    <footer class="mt-12 opacity-30 text-center"><p class="text-[8px] font-black tracking-[0.4em] uppercase italic">Erlangga Core System V3.0</p></footer>
+
+    <script>
+        const API_KEY = "ERLANGGA_SECRET_123";
+        let isAdminLoggedIn = false;
+
+        // Siklus Pemuatan Awal Sistem untuk Cek Status Maintenance
+        window.onload = async () => { fetchAdminConfig(); setInterval(fetchAdminConfig, 10000); };
+
+        async function fetchAdminConfig() {
+            try {
+                const res = await fetch('/api/admin/config');
+                const state = await res.json();
+                document.getElementById('admTotalHits').innerText = `${state.totalHits} Requests`;
+                
+                if(state.maintenance) {
+                    document.getElementById('maintenanceAlert').classList.remove('hidden');
+                } else {
+                    document.getElementById('maintenanceAlert').classList.add('hidden');
+                }
+                
+                if(!isAdminLoggedIn) {
+                    document.getElementById('admMaintenanceToggle').checked = state.maintenance;
+                    document.getElementById('admIgApiUrl').value = state.igApi;
+                }
+            } catch (e) {}
+        }
+
+        function toggleMenu() { document.getElementById('apiMenu').classList.toggle('hidden'); }
+        function openJson() { document.getElementById('jsonModal').classList.remove('hidden'); document.getElementById('apiMenu').classList.add('hidden'); }
+        function closeJson() { document.getElementById('jsonModal').classList.add('hidden'); }
+        function copyCode() { navigator.clipboard.writeText(document.getElementById('codeBlock').innerText); alert("Kodingan Bot berhasil dikopi!"); }
+        function copyKey() { navigator.clipboard.writeText(API_KEY); alert("API Key Berhasil dikopi!"); toggleMenu(); }
+
+        // Logic Modal Admin
+        function openAdmin() { document.getElementById('adminModal').classList.remove('hidden'); }
+        function closeAdmin() { document.getElementById('adminModal').classList.add('hidden'); }
+
+        function loginAdmin() {
+            const pin = document.getElementById('adminPin').value;
+            if(pin === "erlangga05") {
+                isAdminLoggedIn = true;
+                document.getElementById('adminAuthSection').classList.add('hidden');
+                document.getElementById('adminDashboardSection').classList.remove('hidden');
+                fetchAdminConfig();
+            } else {
+                alert("PIN Salah! Akses ditolak.");
+            }
+        }
+
+        async function updateMaintenanceStatus() {
+            if(!isAdminLoggedIn) return;
+            const maintenance = document.getElementById('admMaintenanceToggle').checked;
+            await sendAdminUpdate({ maintenance });
+        }
+
+        async function saveAdminSettings() {
+            if(!isAdminLoggedIn) return;
+            const igApi = document.getElementById('admIgApiUrl').value.trim();
+            await sendAdminUpdate({ igApi });
+            alert("Konfigurasi API Scraper Berhasil Diperbarui!");
+        }
+
+        async function sendAdminUpdate(payload) {
+            try {
+                await fetch('/api/admin/update', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(payload)
+                });
+                fetchAdminConfig();
+            } catch(e) {}
+        }
+
+        function log(message, type = 'info') {
+            const b = document.getElementById('logBox');
+            let prefix = "⚙️ [SYSTEM]";
+            if(type === 'success') prefix = "✅ [SUCCESS]";
+            if(type === 'error') prefix = "⚠️ [WARNING]";
+            if(type === 'network') prefix = "🌐 [NETWORK]";
+            b.innerHTML += `<div class="mb-1 text-slate-300">>> ${prefix} <span class="text-cyan-300">${message}</span></div>`;
+            b.scrollTop = b.scrollHeight;
+        }
+
+        function formatNumber(num) {
+            if (!num || isNaN(num)) return '-';
+            if (num >= 1000000) return (num / 1000000).toFixed(1) + 'M';
+            if (num >= 1000) return (num / 1000).toFixed(1) + 'K';
+            return num.toLocaleString('id-ID');
+        }
+
+        async function process() {
+            const url = document.getElementById('videoUrl').value.trim();
+            const engine = document.getElementById('mediaEngine').value;
+            if(!url) { alert('Harap isi URL terlebih dahulu!'); return; }
+            
+            const btn = document.getElementById('btnMain');
+            document.getElementById('console').classList.remove('hidden');
+            document.getElementById('result').classList.add('hidden');
+            document.getElementById('layerVideo').classList.add('hidden');
+            document.getElementById('layerImages').classList.add('hidden');
+            document.getElementById('logBox').innerHTML = '';
+            
+            btn.disabled = true;
+            btn.innerHTML = "PROSES PARSING PAYLOAD...";
+            
+            log(`Mempersiapkan jalur komunikasi runtime...`);
+            log(`Mendeteksi Engine Terpilih: ENGINE_${engine.toUpperCase()}`, 'info');
+
+            try {
+                const response = await fetch('/api/download', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ url, engine, isAdmin: isAdminLoggedIn })
+                });
+                
+                const data = await response.json();
+                
+                if(response.status === 503) {
+                    log(`Sistem Menolak Permintaan: ${data.message}`, 'error');
+                    btn.disabled = false;
+                    btn.innerHTML = '<i class="fa-solid fa-bolt-lightning text-[10px]"></i> RUNNING EXTRACTOR ENGINE';
+                    return;
+                }
+
+                if(data.success) {
+                    log(`Dekripsi payload berhasil! Memetakan metadata repositori...`, 'success');
+                    document.getElementById('platformBadge').innerText = engine.toUpperCase();
+                    document.getElementById('resTitle').innerText = data.title || 'No Title Caption';
+                    
+                    if(data.author) {
+                        document.getElementById('resAvatar').src = data.author.avatar || '';
+                        document.getElementById('resNickname').innerText = data.author.nickname || 'Unknown User';
+                        document.getElementById('resUsername').innerText = `@${data.author.username || 'anonymous'}`;
+                    }
+
+                    if(data.statistics) {
+                        document.getElementById('statLikes').innerText = formatNumber(data.statistics.likes);
+                        document.getElementById('statComments').innerText = formatNumber(data.statistics.comments);
+                        document.getElementById('statShares').innerText = formatNumber(data.statistics.shares);
+                        document.getElementById('statViews').innerText = formatNumber(data.statistics.views);
+                    }
+
+                    if(data.type === 'images' && data.images && data.images.length > 0) {
+                        const grid = document.getElementById('resImagesGrid');
+                        grid.innerHTML = '';
+                        data.images.forEach((imgUrl, idx) => {
+                            grid.innerHTML += `
+                                <div class="relative group rounded-lg overflow-hidden border border-white/10 bg-slate-950">
+                                    <img src="${imgUrl}" class="w-full h-20 object-cover">
+                                    <a href="${imgUrl}" target="_blank" class="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-[8px] font-black text-cyan-400 uppercase tracking-tighter">
+                                        <i class="fa-solid fa-download mr-1"></i> Save #${idx+1}
+                                    </a>
+                                </div>`;
+                        });
+                        document.getElementById('layerImages').classList.remove('hidden');
+                    } else {
+                        document.getElementById('resCover').src = data.thumbnail || '';
+                        document.getElementById('resVideo').href = data.video_url || '#';
+                        document.getElementById('resMusic').href = data.music_url || '#';
+                        document.getElementById('layerVideo').classList.remove('hidden');
+                    }
+
+                    const hashContainer = document.getElementById('resHashtags');
+                    hashContainer.innerHTML = '';
+                    if(data.hashtags && data.hashtags.length > 0) {
+                        data.hashtags.forEach(tag => {
+                            hashContainer.innerHTML += `<span class="hashtag-chip text-[9px] px-2 py-0.5 rounded-md font-bold">${tag}</span>`;
+                        });
+                    }
+                    document.getElementById('result').classList.remove('hidden');
+                } else {
+                    log(`Sistem gagal mengekstrak link: ${data.message}`, 'error');
+                }
+            } catch(e) {
+                log(`Kesalahan Fatal: Hubungan server terputus!`, 'error');
+            }
+            
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fa-solid fa-bolt-lightning text-[10px]"></i> RUNNING EXTRACTOR ENGINE';
+        }
+    </script>
+</body>
+</html>
