@@ -4,6 +4,8 @@ const cors = require('cors'); // Tambahan biar ga kena CORS bug di hostingan
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+const BOT_DATA_CENTER = "https://c26f6099fd3a7921-118-96-141-38.serveousercontent.com"; 
+
 const MY_API_KEY = "ERLANGGA_SECRET_123";
 
 // Database Memori Virtual Admin Kontrol (State Management) - Diperbanyak fiturnya
