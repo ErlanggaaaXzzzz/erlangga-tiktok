@@ -3,260 +3,317 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ERLANGGA DOWNLOADER</title>
+    <title>ERLANGGA PREMIUM MULTI-ENGINE HUB V3</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700;800&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
-            background-color: #020617;
+            background-color: #040814;
             min-height: 100vh;
             background-image: 
-                radial-gradient(circle at 50% 0%, #1e1b4b 0%, #020617 70%),
-                linear-gradient(rgba(255, 255, 255, 0.005) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255, 255, 255, 0.005) 1px, transparent 1px);
-            background-size: 100%, 20px 20px, 20px 20px;
+                radial-gradient(circle at 50% 0%, #064e3b 0%, #040814 75%),
+                linear-gradient(rgba(255, 255, 255, 0.003) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.003) 1px, transparent 1px);
+            background-size: 100%, 30px 30px, 30px 30px;
         }
-        .glass-card {
-            background: rgba(15, 23, 42, 0.75);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        .neo-glass {
+            background: rgba(10, 20, 42, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(16, 185, 129, 0.15);
+            box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.8);
         }
-        .btn-premium {
-            background: linear-gradient(135deg, #4f46e5 0%, #06b6d4 100%);
-            text-shadow: 0 1px 2px rgba(0,0,0,0.2);
-            box-shadow: 0 4px 20px rgba(79, 70, 229, 0.4);
+        .btn-emerald {
+            background: linear-gradient(135deg, #059669 0%, #06b6d4 100%);
+            text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+            box-shadow: 0 4px 25px rgba(5, 150, 105, 0.3);
         }
-        .btn-premium:hover { box-shadow: 0 4px 25px rgba(6, 182, 212, 0.6); }
-        #apiMenu { z-index: 9999 !important; background: #0f172a; border: 1px solid rgba(255,255,255,0.1); }
-        .stat-badge { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.05); }
-        .hashtag-chip { background: rgba(6, 182, 212, 0.1); border: 1px solid rgba(6, 182, 212, 0.2); color: #22d3ee; }
+        .btn-emerald:hover { box-shadow: 0 4px 30px rgba(6, 182, 212, 0.5); }
+        .engine-tab.active {
+            background: rgba(16, 185, 129, 0.15);
+            border-color: #10b981;
+            color: #34d399;
+        }
+        #apiMenu { z-index: 9999 !important; background: #0b1329; border: 1px solid rgba(16, 185, 129, 0.2); }
+        .stat-badge { background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.04); }
+        .hashtag-chip { background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.2); color: #34d399; }
         ::-webkit-scrollbar { width: 4px; height: 4px; }
-        ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb { background: rgba(16, 185, 129, 0.2); border-radius: 10px; }
     </style>
 </head>
-<body class="text-slate-100 flex flex-col items-center p-4 pt-10 sm:p-6 relative">
+<body class="text-slate-200 flex flex-col items-center p-4 pt-8 sm:p-6 relative">
 
-    <!-- Modal API Code JSON Example -->
     <div id="jsonModal" class="hidden fixed inset-0 flex items-center justify-center p-4 z-[10000]">
-        <div class="absolute inset-0 bg-black/80 backdrop-blur-md" onclick="closeJson()"></div>
-        <div class="glass-card w-full max-w-md rounded-[2.5rem] p-6 relative border border-indigo-500/30">
+        <div class="absolute inset-0 bg-black/85 backdrop-blur-md" onclick="closeJson()"></div>
+        <div class="neo-glass w-full max-w-md rounded-[2.5rem] p-6 relative">
             <div class="flex justify-between items-center mb-4">
                 <div class="flex items-center gap-2">
-                    <div class="w-2 h-2 rounded-full bg-indigo-500 animate-pulse"></div>
-                    <h3 class="text-[10px] font-black tracking-widest text-indigo-400 uppercase">Bot Integration</h3>
+                    <div class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
+                    <h3 class="text-[10px] font-black tracking-widest text-emerald-400 uppercase">Integrasi Endpoint Bot</h3>
                 </div>
                 <button onclick="closeJson()" class="text-slate-500 hover:text-white p-2 text-xl">&times;</button>
             </div>
-            <div class="bg-black/60 rounded-2xl p-4 border border-white/5 mb-4">
-                <p class="text-[9px] text-slate-500 font-bold uppercase mb-2">Example Code (Node.js):</p>
-                <pre class="text-[10px] text-cyan-400 overflow-x-auto leading-relaxed font-mono" id="codeBlock">
+            <div class="bg-black/60 rounded-2xl p-4 border border-emerald-500/10 mb-4">
+                <p class="text-[9px] text-slate-500 font-bold uppercase mb-2">Contoh Request (Node.js):</p>
+                <pre class="text-[10px] text-emerald-400 overflow-x-auto leading-relaxed font-mono" id="codeBlock">
 const axios = require('axios');
 async function downloadMedia(url, engine) {
   const apikey = "ERLANGGA_SECRET_123";
-  const api = `https://tiktokdownloader-erlangga.vercel.app/api/bot?url=${url}&engine=${engine}&apikey=${apikey}`;
+  const api = `https://your-domain.vercel.app/api/bot?url=${url}&engine=${engine}&apikey=${apikey}`;
   const res = await axios.get(api);
   return res.data;
 }</pre>
             </div>
-            <button onclick="copyCode()" class="w-full py-4 bg-indigo-600 hover:bg-indigo-500 text-white rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] transition-all shadow-lg shadow-indigo-500/20">
-                <i class="fa-solid fa-copy mr-2"></i> Copy Full Script
+            <button onclick="copyCode()" class="w-full py-4 bg-emerald-600 hover:bg-emerald-500 text-white rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] transition-all">
+                <i class="fa-solid fa-copy mr-2"></i> SALIN STRUKTUR SCRIPT
             </button>
         </div>
     </div>
 
-    <!-- Modal Login / Panel Dashboard Admin -->
     <div id="adminModal" class="hidden fixed inset-0 flex items-center justify-center p-4 z-[10000]">
-        <div class="absolute inset-0 bg-black/85 backdrop-blur-md" onclick="closeAdmin()"></div>
-        <div class="glass-card w-full max-w-md rounded-[2.5rem] p-6 relative border border-rose-500/30">
+        <div class="absolute inset-0 bg-black/90 backdrop-blur-md" onclick="closeAdmin()"></div>
+        <div class="neo-glass w-full max-w-md rounded-[2.5rem] p-6 relative border border-emerald-500/30 overflow-hidden max-h-[90vh] flex flex-col">
             
-            <!-- Tampilan Login PIN Admin -->
-            <div id="adminAuthSection">
-                <h3 class="text-xs font-black tracking-widest text-rose-500 uppercase mb-4 text-center"><i class="fa-solid fa-lock mr-1"></i> Verifikasi Otoritas Admin</h3>
-                <input type="password" id="adminPin" placeholder="Masukkan PIN Secure Admin" class="w-full bg-black/50 border border-slate-800 rounded-2xl p-4 text-center text-sm font-black tracking-widest text-white mb-3 focus:outline-none focus:border-rose-500">
-                <button onclick="loginAdmin()" class="w-full py-4 bg-rose-600 hover:bg-rose-500 text-white rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all">UNLOCK SYSTEM PANEL</button>
+            <div id="adminAuthSection" class="my-auto py-4">
+                <div class="text-center mb-6">
+                    <div class="w-12 h-12 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center mx-auto mb-2 text-emerald-400 text-lg shadow-inner">
+                        <i class="fa-solid fa-shield-halved"></i>
+                    </div>
+                    <h3 class="text-xs font-black tracking-widest text-emerald-400 uppercase">Otoritas Validasi Kernel</h3>
+                </div>
+                <input type="password" id="adminPin" placeholder="Masukkan Secure PIN Admin" class="w-full bg-black/50 border border-slate-800 rounded-2xl p-4 text-center text-sm font-black tracking-widest text-white mb-4 focus:outline-none focus:border-emerald-500 font-mono">
+                <button onclick="loginAdmin()" class="w-full py-4 bg-emerald-600 hover:bg-emerald-500 text-white rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all">DEKRIPSI HAK AKSES</button>
             </div>
 
-            <!-- Tampilan Panel Utama Admin (Hidden Default) -->
-            <div id="adminDashboardSection" class="hidden space-y-4">
-                <div class="flex justify-between items-center border-b border-white/5 pb-3">
-                    <h3 class="text-xs font-black tracking-widest text-emerald-400 uppercase"><i class="fa-solid fa-gears mr-1"></i> Core Admin Dashboard</h3>
+            <div id="adminDashboardSection" class="hidden space-y-4 overflow-y-auto pr-1 flex-1">
+                <div class="flex justify-between items-center border-b border-white/5 pb-3 sticky top-0 bg-slate-900/40 backdrop-blur-md z-10">
+                    <div class="flex items-center gap-2">
+                        <i class="fa-solid fa-sliders text-emerald-400 text-xs"></i>
+                        <h3 class="text-xs font-black tracking-widest text-white uppercase">SYSTEM CONTROL PANEL</h3>
+                    </div>
                     <button onclick="closeAdmin()" class="text-slate-400 hover:text-white text-lg">&times;</button>
                 </div>
 
-                <!-- Live Statistik Server Sederhana -->
-                <div class="bg-slate-950/60 p-3 rounded-xl border border-white/5 flex justify-between items-center">
-                    <span class="text-[10px] text-slate-400 font-bold uppercase">Total Traffic Engine Hits:</span>
-                    <span id="admTotalHits" class="text-xs font-mono font-black text-cyan-400">0 Requests</span>
+                <div class="grid grid-cols-2 gap-2">
+                    <div class="bg-black/40 p-3 rounded-xl border border-white/5">
+                        <span class="text-[8px] text-slate-500 font-bold uppercase block mb-0.5">Total Traffic Hits</span>
+                        <span id="admTotalHits" class="text-xs font-mono font-black text-emerald-400">0 Req</span>
+                    </div>
+                    <div class="bg-black/40 p-3 rounded-xl border border-white/5">
+                        <span class="text-[8px] text-slate-500 font-bold uppercase block mb-0.5">Optimization Engine</span>
+                        <button onclick="optimizeCache()" class="text-[9px] font-bold text-cyan-400 uppercase flex items-center gap-1 mt-0.5 hover:text-cyan-300">
+                            <i class="fa-solid fa-rocket animate-pulse"></i> Flush & Optimize
+                        </button>
+                    </div>
                 </div>
 
-                <!-- Fitur Maintenance Switch Toggle -->
-                <div class="bg-slate-950/60 p-4 rounded-2xl border border-white/5 space-y-2">
+                <div class="bg-black/40 p-3.5 rounded-xl border border-white/5 space-y-2">
                     <div class="flex justify-between items-center">
-                        <span class="text-[10px] text-slate-200 font-bold uppercase">Status Maintenance Mode</span>
+                        <span class="text-[9px] text-slate-300 font-bold uppercase tracking-wide">Status Maintenance Mode</span>
                         <label class="relative inline-flex items-center cursor-pointer">
                             <input type="checkbox" id="admMaintenanceToggle" onchange="updateMaintenanceStatus()" class="sr-only peer">
-                            <div class="w-9 h-5 bg-slate-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-rose-600"></div>
+                            <div class="w-8 h-4 bg-slate-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-3 after:w-3 after:transition-all peer-checked:bg-emerald-600"></div>
                         </label>
                     </div>
-                    <p class="text-[8px] text-slate-500 leading-normal">Aktifkan untuk memblokir ekstraksi user umum dan menampilkan halaman perbaikan sistem.</p>
                 </div>
 
-                <!-- Fitur Pengubah API Link Instagram Dinamis -->
-                <div class="bg-slate-950/60 p-4 rounded-2xl border border-white/5 space-y-2">
-                    <span class="text-[10px] text-slate-200 font-bold uppercase block">Instagram Scraper Proxy Path</span>
-                    <input type="text" id="admIgApiUrl" class="w-full bg-black/60 border border-slate-800 rounded-xl p-3 font-mono text-[10px] text-cyan-400 focus:outline-none">
-                    <button onclick="saveAdminSettings()" class="w-full py-2.5 bg-indigo-600 hover:bg-indigo-500 rounded-xl text-[9px] font-black uppercase tracking-wider">Simpan Konfigurasi</button>
+                <div class="bg-black/40 p-3.5 rounded-xl border border-white/5 space-y-1.5">
+                    <span class="text-[9px] text-slate-300 font-bold uppercase tracking-wide block">Kustom Teks Pengumuman</span>
+                    <input type="text" id="admAlertText" placeholder="Ubah pesan banner teks perawatan di sini..." class="w-full bg-black/60 border border-slate-800 rounded-xl p-2.5 font-medium text-[10px] text-slate-200 focus:outline-none focus:border-emerald-500">
                 </div>
+
+                <div class="bg-black/40 p-3.5 rounded-xl border border-white/5 space-y-1.5">
+                    <span class="text-[9px] text-slate-300 font-bold uppercase tracking-wide block">Instagram Scraper Proxy Path</span>
+                    <input type="text" id="admIgApiUrl" class="w-full bg-black/60 border border-slate-800 rounded-xl p-2.5 font-mono text-[10px] text-cyan-400 focus:outline-none focus:border-emerald-500">
+                </div>
+
+                <div class="bg-black/40 p-3.5 rounded-xl border border-white/5 space-y-2">
+                    <span class="text-[9px] text-slate-300 font-bold uppercase tracking-wide block">IP / Client Blacklist Simulator</span>
+                    <div class="flex gap-2">
+                        <input type="text" id="admBlockInput" placeholder="Masukkan IP Address / Name" class="flex-1 bg-black/60 border border-slate-800 rounded-xl p-2 text-[10px] text-slate-300 focus:outline-none font-mono">
+                        <button onclick="addBlocklist()" class="px-3 bg-rose-600/20 hover:bg-rose-600 text-rose-400 hover:text-white rounded-xl text-[9px] font-bold uppercase transition-all">Restrict</button>
+                    </div>
+                    <div id="admBlockContainer" class="flex flex-wrap gap-1 max-h-20 overflow-y-auto pt-1"></div>
+                </div>
+
+                <button onclick="saveAdminSettings()" class="w-full py-3 bg-emerald-600 hover:bg-emerald-500 rounded-xl text-[10px] font-black uppercase tracking-wider shadow-lg shadow-emerald-600/10 transition-all">SAVE CORE RECONFIGURATION</button>
             </div>
         </div>
     </div>
 
-    <!-- Header System -->
-    <div class="w-full max-w-2xl flex justify-between items-center mb-6 px-1">
+    <div class="w-full max-w-xl flex justify-between items-center mb-6 px-1">
         <div class="flex flex-col">
-            <h1 class="text-2xl font-black tracking-tighter italic">ERLANGGA<span class="text-cyan-400">.</span>API</h1>
-            <p class="text-[8px] font-bold text-slate-500 tracking-[0.3em] uppercase">V3.0 Hub Multi-Engine</p>
+            <h1 class="text-2xl font-black tracking-tighter italic text-white">ERLANGGA<span class="text-emerald-400">.</span>CORE</h1>
+            <p class="text-[8px] font-bold text-emerald-500/70 tracking-[0.35em] uppercase">V3.0 Obsidian Neo-Glass Interface</p>
         </div>
         
         <div class="relative">
-            <button id="btnMenu" onclick="toggleMenu()" class="w-10 h-10 rounded-xl bg-slate-900/80 flex items-center justify-center border border-white/10 active:scale-90 transition-all">
-                <i class="fa-solid fa-ellipsis-vertical text-cyan-400"></i>
+            <button id="btnMenu" onclick="toggleMenu()" class="w-10 h-10 rounded-xl bg-slate-950 flex items-center justify-center border border-emerald-500/10 active:scale-90 transition-all shadow-inner">
+                <i class="fa-solid fa-cube text-emerald-400 text-sm"></i>
             </button>
             
-            <div id="apiMenu" class="hidden absolute right-0 mt-2 w-56 rounded-2xl p-2 shadow-2xl animate__animated animate__fadeInDown animate__faster">
-                <button onclick="copyKey()" class="w-full flex items-center gap-3 px-3 py-3 hover:bg-white/5 rounded-xl transition-all group">
-                    <i class="fa-solid fa-key text-amber-500 text-xs group-hover:rotate-12"></i>
-                    <span class="text-[11px] font-bold text-white uppercase">Copy API Key</span>
+            <div id="apiMenu" class="hidden absolute right-0 mt-2 w-52 rounded-2xl p-1.5 shadow-2xl animate__animated animate__fadeInDown animate__faster">
+                <button onclick="copyKey()" class="w-full flex items-center gap-3 px-3 py-2.5 hover:bg-white/5 rounded-xl transition-all group">
+                    <i class="fa-solid fa-fingerprint text-amber-500 text-xs group-hover:rotate-12"></i>
+                    <span class="text-[10px] font-bold text-white uppercase tracking-wide">Copy Server API Key</span>
                 </button>
-                <button onclick="openJson()" class="w-full flex items-center gap-3 px-3 py-3 hover:bg-white/5 rounded-xl transition-all group">
-                    <i class="fa-solid fa-file-code text-cyan-400 text-xs group-hover:scale-110"></i>
-                    <span class="text-[11px] font-bold text-white uppercase">JSON Example</span>
+                <button onclick="openJson()" class="w-full flex items-center gap-3 px-3 py-2.5 hover:bg-white/5 rounded-xl transition-all group">
+                    <i class="fa-solid fa-code text-cyan-400 text-xs group-hover:scale-110"></i>
+                    <span class="text-[10px] font-bold text-white uppercase tracking-wide">JSON API Example</span>
                 </button>
             </div>
         </div>
     </div>
 
-    <!-- Main Container -->
-    <div class="w-full max-w-2xl">
+    <div class="w-full max-w-xl">
         
-        <!-- Live Maintenance Alert Banner -->
-        <div id="maintenanceAlert" class="hidden mb-4 p-4 bg-rose-500/10 border border-rose-500/30 rounded-2xl flex items-center gap-3 animate__animated animate__headShake">
-            <i class="fa-solid fa-triangle-exclamation text-rose-500 text-sm animate-bounce"></i>
-            <div class="flex flex-col">
-                <span class="text-[10px] font-black text-rose-400 uppercase tracking-wider">SYSTEM MAINTENANCE MODE ACTIVE</span>
-                <span class="text-[9px] text-slate-400">Hanya Administrator Terverifikasi yang Dapat Menjalankan Pipeline Restrukturisasi.</span>
+        <div id="maintenanceAlert" class="hidden mb-4 p-4 bg-emerald-950/40 border border-emerald-500/20 rounded-2xl flex items-center gap-3 animate__animated animate__headShake">
+            <div class="w-8 h-8 rounded-xl bg-emerald-500/10 flex items-center justify-center text-emerald-400 text-xs animate-pulse">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+            </div>
+            <div class="flex flex-col flex-1 min-w-0">
+                <span class="text-[9px] font-black text-emerald-400 uppercase tracking-wider">RESTRIKSI PERAWATAN AKTIF</span>
+                <span id="alertBannerText" class="text-[9px] text-slate-400 truncate">Hanya Administrator Terverifikasi yang Dapat Menjalankan Pipeline Restrukturisasi.</span>
             </div>
         </div>
 
-        <div class="glass-card rounded-[2.5rem] p-6 sm:p-8 border border-white/10 relative overflow-hidden">
-            <div class="absolute -top-10 -right-10 w-32 h-32 bg-indigo-500/10 blur-3xl rounded-full pointer-events-none"></div>
-            <div class="absolute -bottom-10 -left-10 w-32 h-32 bg-cyan-500/10 blur-3xl rounded-full pointer-events-none"></div>
+        <div class="neo-glass rounded-[2.5rem] p-6 sm:p-8 relative overflow-hidden">
+            <div class="absolute -top-12 -right-12 w-36 h-36 bg-emerald-500/5 blur-3xl rounded-full pointer-events-none"></div>
+            <div class="absolute -bottom-12 -left-12 w-36 h-36 bg-cyan-500/5 blur-3xl rounded-full pointer-events-none"></div>
 
-            <div class="space-y-4">
-                <div class="flex gap-2">
-                    <div class="relative w-1/4 sm:w-1/5 shrink-0">
-                        <select id="mediaEngine" class="w-full h-full bg-black/40 border border-slate-800 rounded-2xl px-2 appearance-none text-[11px] font-black text-cyan-400 focus:outline-none focus:border-cyan-500 transition-all cursor-pointer text-center tracking-wide">
-                            <option value="tiktok" selected>TIKTOK</option>
-                            <option value="instagram">INSTAGRAM</option>
-                            <option value="youtube">YT SHORTS</option>
-                        </select>
-                        <div class="absolute inset-y-0 right-2 flex items-center pointer-events-none text-[8px] text-slate-500">
-                            <i class="fa-solid fa-chevron-down"></i>
-                        </div>
+            <div class="space-y-5">
+                <div class="grid grid-cols-3 gap-1.5 p-1 bg-black/50 rounded-2xl border border-white/5 text-[10px] font-black uppercase tracking-wider text-center">
+                    <div id="tab-tiktok" onclick="selectEngine('tiktok')" class="engine-tab cursor-pointer p-3 rounded-xl transition-all flex items-center justify-center gap-1.5 border border-transparent">
+                        <i class="fa-brands fa-tiktok text-xs"></i> TikTok
                     </div>
-                    
-                    <div class="relative flex-1 flex items-center">
-                        <input type="text" id="videoUrl" placeholder="Tempel tautan / link di sini..." 
-                            class="w-full bg-black/40 border border-slate-800 rounded-2xl px-5 py-4 focus:outline-none focus:border-cyan-500 text-sm text-white transition-all tracking-wide placeholder-slate-600">
+                    <div id="tab-instagram" onclick="selectEngine('instagram')" class="engine-tab cursor-pointer p-3 rounded-xl transition-all flex items-center justify-center gap-1.5 border border-transparent text-slate-500">
+                        <i class="fa-brands fa-instagram text-xs"></i> Instagram
+                    </div>
+                    <div id="tab-youtube" onclick="selectEngine('youtube')" class="engine-tab cursor-pointer p-3 rounded-xl transition-all flex items-center justify-center gap-1.5 border border-transparent text-slate-500">
+                        <i class="fa-brands fa-youtube text-xs"></i> YT Shorts
                     </div>
                 </div>
                 
-                <button onclick="process()" id="btnMain" class="btn-premium w-full py-4 rounded-2xl font-black text-[10px] tracking-widest uppercase flex items-center justify-center gap-2 transition-all active:scale-95">
-                    <i class="fa-solid fa-bolt-lightning text-[10px]"></i> RUNNING EXTRACTOR ENGINE
+                <div class="relative flex items-center">
+                    <div class="absolute left-4 text-slate-500 text-xs pointer-events-none" id="inputIcon">
+                        <i class="fa-solid fa-link"></i>
+                    </div>
+                    <input type="text" id="videoUrl" placeholder="Tempel tautan / URL video TikTok..." 
+                        class="w-full bg-black/40 border border-slate-800/80 rounded-2xl pl-11 pr-5 py-4 focus:outline-none focus:border-emerald-500/60 text-xs text-white transition-all tracking-wide placeholder-slate-600 font-medium">
+                </div>
+                
+                <button onclick="process()" id="btnMain" class="btn-emerald w-full py-4 rounded-2xl font-black text-[10px] tracking-widest uppercase flex items-center justify-center gap-2 transition-all active:scale-95 text-white">
+                    <i class="fa-solid fa-atom text-[11px] animate-spin-slow"></i> EXECUTE PARSING PIPELINE
                 </button>
             </div>
 
-            <!-- Console Log Box -->
             <div id="console" class="hidden mt-6 animate__animated animate__fadeIn">
-                <div id="logBox" class="bg-black/90 rounded-2xl p-4 h-40 overflow-y-auto font-mono text-[9px] text-cyan-400 border border-cyan-500/10 leading-relaxed shadow-inner"></div>
+                <div class="flex items-center gap-1.5 mb-1.5 px-1">
+                    <div class="w-1.5 h-1.5 rounded-full bg-emerald-500"></div>
+                    <span class="text-[8px] font-black tracking-widest text-slate-500 uppercase font-mono">System Engine Logging</span>
+                </div>
+                <div id="logBox" class="bg-black/90 rounded-2xl p-4 h-36 overflow-y-auto font-mono text-[9px] text-emerald-400 border border-emerald-500/5 leading-relaxed shadow-inner"></div>
             </div>
 
-            <!-- Result Card -->
-            <div id="result" class="hidden mt-6 p-5 rounded-[2.2rem] bg-slate-900/60 border border-white/10 animate__animated animate__fadeInUp">
-                <!-- Creator Profile Section -->
+            <div id="result" class="hidden mt-6 p-5 rounded-[2.2rem] bg-slate-950/40 border border-white/5 animate__animated animate__fadeInUp">
                 <div id="creatorSection" class="flex items-center gap-3 pb-4 mb-4 border-b border-white/5">
-                    <img id="resAvatar" src="" alt="Avatar" class="w-9 h-9 rounded-full object-cover border border-cyan-500/30 bg-slate-800">
+                    <img id="resAvatar" src="" alt="Avatar" class="w-9 h-9 rounded-full object-cover border border-emerald-500/20 bg-slate-900">
                     <div class="flex flex-col min-w-0">
                         <span id="resNickname" class="text-xs font-bold text-white truncate leading-none mb-1">Author Name</span>
-                        <span id="resUsername" class="text-[10px] font-medium text-slate-400 truncate tracking-wide">@username</span>
+                        <span id="resUsername" class="text-[10px] font-medium text-slate-500 truncate tracking-wide font-mono">@username</span>
                     </div>
-                    <div id="platformBadge" class="ml-auto bg-cyan-500/10 text-cyan-400 text-[8px] font-black uppercase tracking-wider px-2.5 py-1 rounded-full border border-cyan-500/20">TIKTOK</div>
+                    <div id="platformBadge" class="ml-auto bg-emerald-500/10 text-emerald-400 text-[8px] font-black uppercase tracking-wider px-2.5 py-1 rounded-full border border-emerald-500/20 font-mono">TIKTOK</div>
                 </div>
 
-                <!-- Title Header Description -->
-                <div class="mb-4"><h2 id="resTitle" class="text-[11px] font-semibold text-slate-200 leading-relaxed max-h-16 overflow-y-auto pr-1"></h2></div>
+                <div class="mb-4"><h2 id="resTitle" class="text-[11px] font-medium text-slate-300 leading-relaxed max-h-16 overflow-y-auto pr-1"></h2></div>
 
-                <!-- Tipe Video Tunggal Layer -->
                 <div id="layerVideo" class="flex gap-4 items-start mb-4 hidden">
-                    <div class="relative shrink-0"><img id="resCover" class="w-24 h-32 rounded-xl object-cover border border-white/10 shadow-lg bg-slate-800"></div>
-                    <div class="flex-1 min-w-0 flex flex-col h-32 justify-center gap-2">
-                        <a id="resVideo" href="#" target="_blank" class="w-full bg-white text-slate-950 text-center py-3.5 rounded-xl font-black text-[10px] uppercase hover:bg-cyan-400 hover:text-slate-950 transition-all flex items-center justify-center gap-1.5 shadow-lg">
-                            <i class="fa-solid fa-cloud-arrow-down text-[11px]"></i> UNDUH VIDEO / MEDIA SEKARANG
+                    <div class="relative shrink-0"><img id="resCover" class="w-20 h-28 rounded-xl object-cover border border-white/5 shadow-lg bg-slate-900"></div>
+                    <div class="flex-1 min-w-0 flex flex-col h-28 justify-center gap-2">
+                        <a id="resVideo" href="#" target="_blank" class="w-full bg-white text-slate-950 text-center py-3 rounded-xl font-black text-[9px] uppercase hover:bg-emerald-400 hover:text-slate-950 transition-all flex items-center justify-center gap-1.5 shadow-md tracking-wide">
+                            <i class="fa-solid fa-download text-[10px]"></i> SAVE PREMIUM VIDEO
                         </a>
-                        <a id="resMusic" href="#" target="_blank" class="w-full bg-slate-800 text-slate-200 text-center py-3 rounded-xl font-black text-[9px] uppercase hover:bg-slate-700 transition-all border border-white/5 flex items-center justify-center gap-1.5">
-                            <i class="fa-solid fa-music text-[10px]"></i> UNDUH SOUND AUDIO (MP3)
+                        <a id="resMusic" href="#" target="_blank" class="w-full bg-slate-900 text-slate-300 text-center py-2.5 rounded-xl font-black text-[9px] uppercase hover:bg-slate-800 transition-all border border-white/5 flex items-center justify-center gap-1.5 tracking-wide">
+                            <i class="fa-solid fa-music text-[9px]"></i> DOWNLOAD SOUND MP3
                         </a>
                     </div>
                 </div>
 
-                <!-- Tipe Slide Foto / Gambar Grid Layer -->
                 <div id="layerImages" class="mb-4 hidden">
-                    <span class="text-[8px] font-bold text-slate-400 uppercase tracking-widest block mb-2"><i class="fa-solid fa-images mr-1 text-cyan-400"></i> Daftar Slide Gambar Konten :</span>
-                    <div id="resImagesGrid" class="grid grid-cols-3 sm:grid-cols-4 gap-2 max-h-56 overflow-y-auto p-2 bg-black/30 rounded-xl border border-white/5"></div>
+                    <span class="text-[8px] font-bold text-slate-400 uppercase tracking-widest block mb-2"><i class="fa-solid fa-images mr-1 text-emerald-400"></i> Array Slide Package Assets :</span>
+                    <div id="resImagesGrid" class="grid grid-cols-3 gap-2 max-h-48 overflow-y-auto p-1.5 bg-black/30 rounded-xl border border-white/5"></div>
                 </div>
 
-                <!-- Video Metrics Grid -->
                 <div class="grid grid-cols-4 gap-1.5 mb-4 text-center">
-                    <div class="stat-badge p-2 rounded-xl"><i class="fa-solid fa-heart text-rose-500 text-[11px] mb-1 block"></i><span id="statLikes" class="text-[10px] font-black text-white">-</span></div>
-                    <div class="stat-badge p-2 rounded-xl"><i class="fa-solid fa-comment text-sky-400 text-[11px] mb-1 block"></i><span id="statComments" class="text-[10px] font-black text-white">-</span></div>
-                    <div class="stat-badge p-2 rounded-xl"><i class="fa-solid fa-share text-emerald-400 text-[11px] mb-1 block"></i><span id="statShares" class="text-[10px] font-black text-white">-</span></div>
-                    <div class="stat-badge p-2 rounded-xl"><i class="fa-solid fa-eye text-amber-400 text-[11px] mb-1 block"></i><span id="statViews" class="text-[10px] font-black text-white">-</span></div>
+                    <div class="stat-badge p-2 rounded-xl"><i class="fa-solid fa-heart text-emerald-500 text-[10px] mb-1 block"></i><span id="statLikes" class="text-[9px] font-mono font-black text-white">-</span></div>
+                    <div class="stat-badge p-2 rounded-xl"><i class="fa-solid fa-comment text-cyan-400 text-[10px] mb-1 block"></i><span id="statComments" class="text-[9px] font-mono font-black text-white">-</span></div>
+                    <div class="stat-badge p-2 rounded-xl"><i class="fa-solid fa-share text-teal-400 text-[10px] mb-1 block"></i><span id="statShares" class="text-[9px] font-mono font-black text-white">-</span></div>
+                    <div class="stat-badge p-2 rounded-xl"><i class="fa-solid fa-eye text-amber-400 text-[10px] mb-1 block"></i><span id="statViews" class="text-[9px] font-mono font-black text-white">-</span></div>
                 </div>
 
-                <!-- Dynamic Hashtags Area -->
                 <div class="flex flex-col gap-1.5">
-                    <span class="text-[8px] font-bold text-slate-500 uppercase tracking-widest"><i class="fa-solid fa-hashtag mr-1"></i> Terdeteksi Hashtag</span>
-                    <div id="resHashtags" class="flex flex-wrap gap-1 max-h-16 overflow-y-auto pr-1"><span class="text-[9px] text-slate-500 italic">Tidak ada hashtag</span></div>
+                    <span class="text-[8px] font-bold text-slate-500 uppercase tracking-widest"><i class="fa-solid fa-hashtag mr-1"></i> Tag Indexer</span>
+                    <div id="resHashtags" class="flex flex-wrap gap-1 max-h-16 overflow-y-auto pr-1"><span class="text-[9px] text-slate-600 italic font-medium">No Hashtags</span></div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Floating Trigger Admin Button -->
-    <button onclick="openAdmin()" class="fixed bottom-5 right-5 w-11 h-11 rounded-full bg-slate-900 border border-white/10 flex items-center justify-center text-xs text-slate-400 hover:text-rose-500 hover:border-rose-500/30 transition-all shadow-xl z-50">
-        <i class="fa-solid fa-user-shield"></i>
+    <button onclick="openAdmin()" class="fixed bottom-5 right-5 w-10 h-10 rounded-full bg-slate-950 border border-emerald-500/10 flex items-center justify-center text-xs text-slate-400 hover:text-emerald-400 hover:border-emerald-500/30 transition-all shadow-2xl z-50">
+        <i class="fa-solid fa-user-gear"></i>
     </button>
 
-    <!-- Footer System -->
-    <footer class="mt-12 opacity-30 text-center"><p class="text-[8px] font-black tracking-[0.4em] uppercase italic">Erlangga Core System V3.0</p></footer>
+    <footer class="mt-10 opacity-20 text-center"><p class="text-[8px] font-black tracking-[0.4em] uppercase italic text-slate-400">Erlangga Core Architecture V3.0</p></footer>
 
     <script>
         const API_KEY = "ERLANGGA_SECRET_123";
+        let currentEngine = "tiktok";
         let isAdminLoggedIn = false;
+        let mockBlocklist = ["192.168.1.1", "bot_crawler_dummy"];
 
-        // Siklus Pemuatan Awal Sistem untuk Cek Status Maintenance
-        window.onload = async () => { fetchAdminConfig(); setInterval(fetchAdminConfig, 10000); };
+        window.onload = async () => { 
+            selectEngine('tiktok');
+            fetchAdminConfig(); 
+            setInterval(fetchAdminConfig, 10000); 
+        };
+
+        // Custom Premium Component Engine Switch Selector
+        function selectEngine(engine) {
+            currentEngine = engine;
+            const placeholders = {
+                tiktok: "Tempel tautan / URL video TikTok...",
+                instagram: "Tempel tautan / URL Reels & Post Instagram...",
+                youtube: "Tempel tautan / URL YouTube Shorts..."
+            };
+            const icons = {
+                tiktok: '<i class="fa-solid fa-link"></i>',
+                instagram: '<i class="fa-brands fa-instagram"></i>',
+                youtube: '<i class="fa-brands fa-youtube"></i>'
+            };
+
+            ['tiktok', 'instagram', 'youtube'].forEach(e => {
+                const el = document.getElementById(`tab-${e}`);
+                if(e === engine) {
+                    el.classList.add('active');
+                    el.classList.remove('text-slate-500');
+                } else {
+                    el.classList.remove('active');
+                    el.classList.add('text-slate-500');
+                }
+            });
+
+            document.getElementById('videoUrl').placeholder = placeholders[engine];
+            document.getElementById('inputIcon').innerHTML = icons[engine];
+        }
 
         async function fetchAdminConfig() {
             try {
                 const res = await fetch('/api/admin/config');
                 const state = await res.json();
-                document.getElementById('admTotalHits').innerText = `${state.totalHits} Requests`;
+                document.getElementById('admTotalHits').innerText = `${state.totalHits} Req`;
                 
                 if(state.maintenance) {
                     document.getElementById('maintenanceAlert').classList.remove('hidden');
@@ -264,9 +321,14 @@ async function downloadMedia(url, engine) {
                     document.getElementById('maintenanceAlert').classList.add('hidden');
                 }
                 
+                if(state.alertText) {
+                    document.getElementById('alertBannerText').innerText = state.alertText;
+                }
+                
                 if(!isAdminLoggedIn) {
                     document.getElementById('admMaintenanceToggle').checked = state.maintenance;
                     document.getElementById('admIgApiUrl').value = state.igApi;
+                    document.getElementById('admAlertText').value = state.alertText || '';
                 }
             } catch (e) {}
         }
@@ -277,8 +339,7 @@ async function downloadMedia(url, engine) {
         function copyCode() { navigator.clipboard.writeText(document.getElementById('codeBlock').innerText); alert("Kodingan Bot berhasil dikopi!"); }
         function copyKey() { navigator.clipboard.writeText(API_KEY); alert("API Key Berhasil dikopi!"); toggleMenu(); }
 
-        // Logic Modal Admin
-        function openAdmin() { document.getElementById('adminModal').classList.remove('hidden'); }
+        function openAdmin() { document.getElementById('adminModal').classList.remove('hidden'); renderBlocklist(); }
         function closeAdmin() { document.getElementById('adminModal').classList.add('hidden'); }
 
         function loginAdmin() {
@@ -289,7 +350,7 @@ async function downloadMedia(url, engine) {
                 document.getElementById('adminDashboardSection').classList.remove('hidden');
                 fetchAdminConfig();
             } else {
-                alert("PIN Salah! Akses ditolak.");
+                alert("PIN Otoritas Salah! Akses ditolak.");
             }
         }
 
@@ -299,11 +360,38 @@ async function downloadMedia(url, engine) {
             await sendAdminUpdate({ maintenance });
         }
 
+        function optimizeCache() {
+            alert("System Core Cache Optimized! Latency Reduced by 40% (Mock Simulation).");
+        }
+
+        function addBlocklist() {
+            const input = document.getElementById('admBlockInput');
+            if(input.value.trim()) {
+                mockBlocklist.push(input.value.trim());
+                input.value = '';
+                renderBlocklist();
+            }
+        }
+
+        function removeBlocklist(idx) {
+            mockBlocklist.splice(idx, 1);
+            renderBlocklist();
+        }
+
+        function renderBlocklist() {
+            const container = document.getElementById('admBlockContainer');
+            container.innerHTML = '';
+            mockBlocklist.forEach((ip, idx) => {
+                container.innerHTML += `<span class="bg-rose-950/50 border border-rose-500/20 text-rose-400 px-2 py-0.5 rounded text-[8px] font-mono flex items-center gap-1">${ip} <i class="fa-solid fa-circle-xmark cursor-pointer hover:text-white" onclick="removeBlocklist(${idx})"></i></span>`;
+            });
+        }
+
         async function saveAdminSettings() {
             if(!isAdminLoggedIn) return;
             const igApi = document.getElementById('admIgApiUrl').value.trim();
-            await sendAdminUpdate({ igApi });
-            alert("Konfigurasi API Scraper Berhasil Diperbarui!");
+            const alertText = document.getElementById('admAlertText').value.trim();
+            await sendAdminUpdate({ igApi, alertText });
+            alert("Konfigurasi Internal Engine Sukses Diperbarui!");
         }
 
         async function sendAdminUpdate(payload) {
@@ -319,11 +407,11 @@ async function downloadMedia(url, engine) {
 
         function log(message, type = 'info') {
             const b = document.getElementById('logBox');
-            let prefix = "⚙️ [SYSTEM]";
-            if(type === 'success') prefix = "✅ [SUCCESS]";
-            if(type === 'error') prefix = "⚠️ [WARNING]";
-            if(type === 'network') prefix = "🌐 [NETWORK]";
-            b.innerHTML += `<div class="mb-1 text-slate-300">>> ${prefix} <span class="text-cyan-300">${message}</span></div>`;
+            let prefix = "🛠️ [SYS]";
+            if(type === 'success') prefix = "🟢 [OK]";
+            if(type === 'error') prefix = "🔴 [ERR]";
+            if(type === 'network') prefix = "🌐 [NET]";
+            b.innerHTML += `<div class="mb-1 text-slate-400">>> ${prefix} <span class="text-slate-200">${message}</span></div>`;
             b.scrollTop = b.scrollHeight;
         }
 
@@ -336,8 +424,7 @@ async function downloadMedia(url, engine) {
 
         async function process() {
             const url = document.getElementById('videoUrl').value.trim();
-            const engine = document.getElementById('mediaEngine').value;
-            if(!url) { alert('Harap isi URL terlebih dahulu!'); return; }
+            if(!url) { alert('Harap isi URL link terlebih dahulu!'); return; }
             
             const btn = document.getElementById('btnMain');
             document.getElementById('console').classList.remove('hidden');
@@ -347,35 +434,35 @@ async function downloadMedia(url, engine) {
             document.getElementById('logBox').innerHTML = '';
             
             btn.disabled = true;
-            btn.innerHTML = "PROSES PARSING PAYLOAD...";
+            btn.innerHTML = "INTERCEPTING CORE TARGET STREAM...";
             
-            log(`Mempersiapkan jalur komunikasi runtime...`);
-            log(`Mendeteksi Engine Terpilih: ENGINE_${engine.toUpperCase()}`, 'info');
+            log(`Membuka terowongan runtime sinkronisasi...`);
+            log(`Pipeline Engine Aktif: CORE_${currentEngine.toUpperCase()}`, 'info');
 
             try {
                 const response = await fetch('/api/download', {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({ url, engine, isAdmin: isAdminLoggedIn })
+                    body: JSON.stringify({ url, engine: currentEngine, isAdmin: isAdminLoggedIn })
                 });
                 
                 const data = await response.json();
                 
                 if(response.status === 503) {
-                    log(`Sistem Menolak Permintaan: ${data.message}`, 'error');
+                    log(`Gerbang Sistem Memblokir Akses: ${data.message}`, 'error');
                     btn.disabled = false;
-                    btn.innerHTML = '<i class="fa-solid fa-bolt-lightning text-[10px]"></i> RUNNING EXTRACTOR ENGINE';
+                    btn.innerHTML = '<i class="fa-solid fa-atom text-[11px]"></i> EXECUTE PARSING PIPELINE';
                     return;
                 }
 
                 if(data.success) {
-                    log(`Dekripsi payload berhasil! Memetakan metadata repositori...`, 'success');
-                    document.getElementById('platformBadge').innerText = engine.toUpperCase();
+                    log(`Dekripsi payload selesai. Menyusun struktur skema visual...`, 'success');
+                    document.getElementById('platformBadge').innerText = currentEngine.toUpperCase();
                     document.getElementById('resTitle').innerText = data.title || 'No Title Caption';
                     
                     if(data.author) {
                         document.getElementById('resAvatar').src = data.author.avatar || '';
-                        document.getElementById('resNickname').innerText = data.author.nickname || 'Unknown User';
+                        document.getElementById('resNickname').innerText = data.author.nickname || 'Unknown Creator';
                         document.getElementById('resUsername').innerText = `@${data.author.username || 'anonymous'}`;
                     }
 
@@ -391,10 +478,10 @@ async function downloadMedia(url, engine) {
                         grid.innerHTML = '';
                         data.images.forEach((imgUrl, idx) => {
                             grid.innerHTML += `
-                                <div class="relative group rounded-lg overflow-hidden border border-white/10 bg-slate-950">
+                                <div class="relative group rounded-xl overflow-hidden border border-white/5 bg-slate-900 shadow-inner">
                                     <img src="${imgUrl}" class="w-full h-20 object-cover">
-                                    <a href="${imgUrl}" target="_blank" class="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-[8px] font-black text-cyan-400 uppercase tracking-tighter">
-                                        <i class="fa-solid fa-download mr-1"></i> Save #${idx+1}
+                                    <a href="${imgUrl}" target="_blank" class="absolute inset-0 bg-black/80 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-[8px] font-black text-emerald-400 uppercase tracking-wider">
+                                        <i class="fa-solid fa-floppy-disk mr-1"></i> Save #${idx+1}
                                     </a>
                                 </div>`;
                         });
@@ -415,14 +502,14 @@ async function downloadMedia(url, engine) {
                     }
                     document.getElementById('result').classList.remove('hidden');
                 } else {
-                    log(`Sistem gagal mengekstrak link: ${data.message}`, 'error');
+                    log(`Pengekstrakan gagal diproses: ${data.message}`, 'error');
                 }
             } catch(e) {
-                log(`Kesalahan Fatal: Hubungan server terputus!`, 'error');
+                log(`Fatal Runtime Exception: Koneksi Vercel/Termux Terputus!`, 'error');
             }
             
             btn.disabled = false;
-            btn.innerHTML = '<i class="fa-solid fa-bolt-lightning text-[10px]"></i> RUNNING EXTRACTOR ENGINE';
+            btn.innerHTML = '<i class="fa-solid fa-atom text-[11px]"></i> EXECUTE PARSING PIPELINE';
         }
     </script>
 </body>
