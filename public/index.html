@@ -58,7 +58,7 @@
 const axios = require('axios');
 async function downloadMedia(url, engine) {
   const apikey = "ERLANGGA_SECRET_123";
-  const api = `http://localhost:3000/api/bot?url=${url}&engine=${engine}&apikey=${apikey}`;
+  const api = `https://tiktokdownloader-erlangga.vercel.app/api/bot?url=${url}&engine=${engine}&apikey=${apikey}`;
   const res = await axios.get(api);
   return res.data;
 }</pre>
