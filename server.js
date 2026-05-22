@@ -6,10 +6,11 @@ const PORT = process.env.PORT || 3000;
 
 const MY_API_KEY = "ERLANGGA_SECRET_123";
 
-// Database Memori Virtual Admin Kontrol (State Management)
+// Database Memori Virtual Admin Kontrol (State Management) - Diperbanyak fiturnya
 let systemConfig = {
     isMaintenance: false,
     instagramScraperUrl: "https://api.ahmad.my.id/api/v1/instagram/download",
+    alertText: "Hanya Administrator Terverifikasi yang Dapat Menjalankan Pipeline Restrukturisasi.",
     totalHits: 0
 };
 
@@ -31,15 +32,17 @@ app.get('/api/admin/config', (req, res) => {
     res.json({
         maintenance: systemConfig.isMaintenance,
         igApi: systemConfig.instagramScraperUrl,
+        alertText: systemConfig.alertText,
         totalHits: systemConfig.totalHits
     });
 });
 
 app.post('/api/admin/update', (req, res) => {
-    const { maintenance, igApi } = req.body;
+    const { maintenance, igApi, alertText } = req.body;
     if (maintenance !== undefined) systemConfig.isMaintenance = maintenance;
     if (igApi !== undefined) systemConfig.instagramScraperUrl = igApi;
-    res.json({ success: true, message: "Configuration persistent in memory memory." });
+    if (alertText !== undefined) systemConfig.alertText = alertText;
+    res.json({ success: true, message: "Configuration persistent in volatile memory." });
 });
 
 /**
@@ -51,7 +54,7 @@ app.get('/api/bot', async (req, res) => {
 
     // Bot terpengaruh mode maintenance kecuali menyertakan API Key Admin
     if (systemConfig.isMaintenance && apikey !== MY_API_KEY) {
-        return res.status(503).json({ status: false, message: 'Server is under maintenance mode.' });
+        return res.status(503).json({ status: false, message: `Server under maintenance: ${systemConfig.alertText}` });
     }
     if (apikey !== MY_API_KEY) {
         return res.status(401).json({ status: false, message: 'Unauthorized: Invalid API Key' });
@@ -99,11 +102,11 @@ app.post('/api/download', async (req, res) => {
     const { url, engine, isAdmin } = req.body;
     const targetEngine = engine || 'tiktok';
 
-    // Proteksi Gerbang Maintenance Mode
+    // Proteksi Gerbang Maintenance Mode dengan Teks Pengumuman Kustom Dinamis
     if (systemConfig.isMaintenance && !isAdmin) {
         return res.status(503).json({ 
             success: false, 
-            message: "Sistem inti sedang dalam perawatan berkala. Silakan hubungi Erlangga untuk informasi pembukaan restriksi." 
+            message: systemConfig.alertText 
         });
     }
 
